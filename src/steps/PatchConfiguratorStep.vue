@@ -49,14 +49,13 @@ const deleteDropFile = (filename) => {
 }
 
 const addFile = async (newFiles) => {
-  for (let i=0; i < newFiles.length; i++) {
+  for (const newFile of newFiles) {
     const file = {
-        filename: newFiles[i].name,
-        partition: newFiles[i].name.split('.')[0],
-        slot: slotToggle.value,
-        size: (newFiles[i].size / 1024 / 1024).toFixed(2) + ' MB',
-        blob: await disableVerifyVbmeta(newFiles[i])
-
+      filename: newFile.name,
+      partition: newFile.name.split('.')[0],
+      slot: slotToggle.value,
+      size: (newFile.size / 1024 / 1024).toFixed(2) + ' MB',
+      blob: await disableVerifyVbmeta(newFile)
     }
     data.value.push(file)
   }
