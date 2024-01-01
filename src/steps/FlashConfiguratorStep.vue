@@ -58,23 +58,25 @@ const columns = ref([
   }
 ])
 
-for (let i = 0; i < data.value.length; i++) {
-  if (typeof data.value[i].blob === 'string') {
-    downloadFileWithProgress(data.value[i].blob, (progress) => {
-      data.value[i].progress = progress
-    }).then((blob) => {
-      data.value[i].blob = blob;
-      data.value[i].size = (data.value[i].blob.size / 1024 / 1024).toFixed(2) + ' MB'
-    }).catch((err) => {
-      Swal.fire({
-        title: 'Error',
-        text: `Unable to download ${data.value[i].filename}`,
-        icon: 'error',
-        confirmButtonText: 'Skip this file'
-      }).then(() => {
-        deleteDropFile(data.value[i].filename)
-      })
+for (const file of data.value) {
+  if (typeof file.blob === 'string') {
+    downloadFileWithProgress(file.blob, (progress) => {
+      file.progress = progress
     })
+      .then((blob) => {
+        file.blob = blob
+        file.size = (file.blob.size / 1024 / 1024).toFixed(2) + ' MB'
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: 'Error',
+          text: `Unable to download ${file.filename}`,
+          icon: 'error',
+          confirmButtonText: 'Skip this file'
+        }).then(() => {
+          deleteDropFile(file.filename)
+        })
+      })
   }
 }
 
@@ -93,15 +95,15 @@ const setFlashSlot = (index) => {
 }
 
 const addFile = (newFiles) => {
-  for (let i=0; i < newFiles.length; i++) {
+  for (const newFile of newFiles) {
     const file = {
-        filename: newFiles[i].name,
-        partition: newFiles[i].name.split('.')[0],
-        size: (newFiles[i].size / 1024 / 1024).toFixed(2) + ' MB',
-        slot: deviceStore.isABDevice ? slotToggle.value : null,
-        blob: newFiles[i]
+      filename: newFile.name,
+      partition: newFile.name.split('.')[0],
+      size: (newFile.size / 1024 / 1024).toFixed(2) + ' MB',
+      slot: deviceStore.isABDevice ? slotToggle.value : null,
+      blob: newFile
     }
-    if (file.partition == "vbmeta") hasVbmeta.value = true;
+    if (file.partition == 'vbmeta') hasVbmeta.value = true
     data.value.push(file)
   }
   console.log(data.value)
