@@ -2,7 +2,7 @@
 import Swal from 'sweetalert2'
 import { ref, defineEmits } from 'vue'
 import { useDeviceStore } from '@/stores/devices'
-import disableVerifyVbmeta from 'vbmeta-disabler';
+import disableVerifyVbmeta from 'vbmeta-disabler'
 
 const emit = defineEmits(['patch'])
 const slotToggle = ref('a')
