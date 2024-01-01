@@ -16,22 +16,22 @@ const data = deviceStore.flashObject.files;
 async function startFlashing() {
   progress.value = 0;
   let curr_progress = -1;
-  for (let i = 0; i < data.length; i++) {
+  for (const item of data) {
     curr_progress++;
-    if (data[i].slot != null) { 
+    if (item.slot != null) { 
       console.log("Switching slot")
-      await device.runCommand(`set_active:${data[i].slot}`);
+      await device.runCommand(`set_active:${item.slot}`);
     }
-    latestLine.value = `Flashing ${data[i].filename}...`;
-    if (data.options?.disableVerity && data[i].partition == 'vbmeta') {
-      const vbmeta = await disableVerifyVbmeta(data[i].blob);
-      await device.flashBlob(data[i].partition, vbmeta, (t) => {
+    latestLine.value = `Flashing ${item.filename}...`;
+    if (data.options?.disableVerity && item.partition == 'vbmeta') {
+      const vbmeta = await disableVerifyVbmeta(item.blob);
+      await device.flashBlob(item.partition, vbmeta, (t) => {
         // take progress.value every iteration and add progress to it
         progress.value = curr_progress + t;
       })
       continue;
     }
-    await device.flashBlob(data[i].partition, data[i].blob, (t) => {
+    await device.flashBlob(item.partition, item.blob, (t) => {
       console.log(t)
       // take progress.value every iteration and add progress to it
       progress.value = curr_progress + t;
