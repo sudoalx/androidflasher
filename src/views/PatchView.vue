@@ -23,12 +23,12 @@ function startFlash() {
 
 function startDownload() {
   console.log(deviceStore.flashObject)
-  for (let i = 0; i < deviceStore.flashObject.files.length; i++) {
-    const blob = new Blob([deviceStore.flashObject.files[i]], { type: 'application/octet-stream' })
+  for (const element of deviceStore.flashObject.files) {
+    const blob = new Blob([element], { type: 'application/octet-stream' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = deviceStore.flashObject.files[i].filename
+    link.download = element.filename
     link.click()
   }
 }
